@@ -31,3 +31,12 @@ Pada commit kelima, terjadi perubahan signifikan pada arsitektur server dengan d
 Sementara itu, file baru berfungsi sebagai implementasi dari thread pool itu sendiri. Di dalamnya terdapat struktur yang mengelola kumpulan worker serta sistem komunikasi antar thread menggunakan channel. Setiap worker berjalan dalam loop yang terus menunggu tugas, lalu mengeksekusinya ketika menerima pekerjaan baru. Untuk memungkinkan banyak worker mengakses sumber tugas yang sama secara aman, digunakan mekanisme berbagi data dengan sinkronisasi.
 
 Saat sebuah tugas dikirim, tugas tersebut dikemas dan dimasukkan ke dalam channel, lalu akan diambil oleh salah satu worker yang tersedia. Pendekatan ini memanfaatkan sistem kepemilikan dan keamanan memori Rust, sehingga concurrency dapat dilakukan tanpa risiko data race. Hasilnya, server menjadi jauh lebih responsif, terbukti ketika mengakses rute yang memiliki delay tidak lagi menghambat request lain.
+
+## Commit Bonus Reflection
+Pada commit bonus ini, dilakukan peningkatan pada mekanisme pembuatan thread pool dengan menambahkan penanganan error yang lebih baik. Sebelumnya, pembuatan thread pool dilakukan secara langsung tanpa validasi, namun kini diperkenalkan sebuah method baru yang mengikuti pola builder. Method ini menerima jumlah thread sebagai parameter dan mengembalikan hasil dalam bentuk Result, sehingga kemungkinan kegagalan dapat ditangani secara eksplisit.
+
+Untuk mendukung hal tersebut, dibuat sebuah struktur khusus yang merepresentasikan error ketika pembuatan thread pool gagal. Struktur ini dilengkapi dengan implementasi formatting standar sehingga pesan error yang dihasilkan menjadi lebih informatif dan mudah dipahami, baik untuk debugging maupun untuk ditampilkan ke pengguna.
+
+Selain itu, terdapat validasi tambahan untuk memastikan bahwa jumlah thread yang diberikan harus bernilai positif dan tidak nol. Jika kondisi ini tidak terpenuhi, maka proses pembuatan thread pool akan gagal dan mengembalikan error yang sesuai. Perubahan ini membuat sistem menjadi lebih aman dan robust karena mencegah konfigurasi yang tidak valid sejak awal.
+
+Di sisi penggunaan, cara inisialisasi thread pool juga disesuaikan untuk menangani nilai Result yang dikembalikan. Dengan demikian, keseluruhan perubahan ini menunjukkan penerapan prinsip error handling yang lebih baik dalam Rust, sekaligus meningkatkan keandalan program.
