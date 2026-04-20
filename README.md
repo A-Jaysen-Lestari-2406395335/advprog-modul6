@@ -1,0 +1,7 @@
+## Commit 1 Reflection
+
+Kode pada commit pertama merupakan implementasi sederhana dari sebuah server HTTP menggunakan Rust. Program ini bekerja dengan membuat server TCP yang berjalan pada alamat lokal 127.0.0.1 di port 7878. Setiap kali ada koneksi yang masuk, server akan menerima data tersebut dan memprosesnya melalui sebuah fungsi khusus.
+
+Di dalam fungsi tersebut, koneksi yang diterima diperlakukan sebagai stream yang bisa dimodifikasi. Untuk membaca data dengan lebih efisien, digunakan mekanisme buffering sehingga data dapat diproses baris demi baris. Setiap baris yang diterima kemudian diambil hingga mencapai baris kosong, yang menandakan akhir dari header HTTP. Seluruh baris ini kemudian dikumpulkan menjadi sebuah struktur data berbentuk list.
+
+Setelah semua data permintaan HTTP berhasil dibaca, informasi tersebut ditampilkan ke console. Dari hasil yang diperoleh, terlihat bahwa server menerima request HTTP standar yang berisi metode GET untuk mengakses halaman utama. Selain itu, terdapat berbagai header yang menjelaskan detail permintaan, seperti alamat tujuan, jenis koneksi, preferensi cache, informasi browser yang digunakan, tipe konten yang dapat diterima, serta preferensi encoding dan bahasa. Header-header ini memberikan gambaran lengkap mengenai bagaimana client (browser) berkomunikasi dengan server.
